@@ -36,3 +36,10 @@ func HandleSetConfig(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(config)
 }
+
+// GetConfig returns a copy of the current config
+func GetConfig() Config {
+	configLock.RLock()
+	defer configLock.RUnlock()
+	return config
+}

@@ -5,8 +5,7 @@
 # "missing LC_UUID load command". Workarounds:
 #
 # 1. Upgrade Go: brew upgrade go
-# 2. Use docker: docker build -t cash-register-backend . && docker run -p 8080:8080 cash-register-backend
-# 3. Use WSL on Windows instead
+# 2. If needed, run on a Linux VM or container outside this host
 
 cd "$(dirname "$0")" || exit 1
 
@@ -18,8 +17,6 @@ PORT=${PORT:-8080} go run ./cmd/main.go 2>&1 || {
     echo "Fix: Upgrade Go to the latest version"
     echo "  brew upgrade go"
     echo ""
-    echo "Or use Docker:"
-    echo "  docker build -t cash-register-backend ."
-    echo "  docker run -p 8080:8080 cash-register-backend"
+    echo "If upgrading doesn't help, please run the backend on a Linux container or different machine." 
     exit 1
 }

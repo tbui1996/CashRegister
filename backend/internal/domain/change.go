@@ -37,7 +37,7 @@ func GetDenominations() []Denomination {
 
 // CalculateChange calculates the change owed and returns denominations
 // If the change amount is divisible by 3 (in cents), it randomizes the denominations
-func CalculateChange(request ChangeRequest) (*ChangeResult, error) {
+func CalculateChange(request ChangeRequest, divisor int, country string, specialCases []string) (*ChangeResult, error) {
 	change := request.AmountPaid - request.AmountOwed
 	change = math.Round(change*100) / 100 // Handle floating point precision
 
@@ -82,6 +82,10 @@ func CalculateChange(request ChangeRequest) (*ChangeResult, error) {
 
 	if shouldRandomize {
 		return randomizeChange(changeCents)
+		// Check divisor to determine if we should randomize
+		if divisor <= 0 {
+			divisor = 3
+		}
 	}
 
 	return minimumChange(changeCents), nil

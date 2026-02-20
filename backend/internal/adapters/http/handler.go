@@ -55,7 +55,8 @@ func (h *Handler) HandleCalculateChange(w http.ResponseWriter, r *http.Request) 
 		AmountPaid: req.AmountPaid,
 	}
 
-	result, err := domain.CalculateChange(changeRequest)
+	cfg := GetConfig()
+	result, err := domain.CalculateChange(changeRequest, cfg.RandomDivisor, cfg.Country, cfg.SpecialCases)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -96,7 +97,8 @@ func (h *Handler) HandleBatchCalculate(w http.ResponseWriter, r *http.Request) {
 			AmountPaid: req.AmountPaid,
 		}
 
-		result, err := domain.CalculateChange(changeRequest)
+		cfg := GetConfig()
+		result, err := domain.CalculateChange(changeRequest, cfg.RandomDivisor, cfg.Country, cfg.SpecialCases)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
@@ -172,7 +174,8 @@ func (h *Handler) HandleFileUpload(w http.ResponseWriter, r *http.Request) {
 			AmountPaid: amountPaid,
 		}
 
-		result, err := domain.CalculateChange(changeRequest)
+		cfg := GetConfig()
+		result, err := domain.CalculateChange(changeRequest, cfg.RandomDivisor, cfg.Country, cfg.SpecialCases)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
