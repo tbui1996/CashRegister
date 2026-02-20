@@ -54,8 +54,31 @@ func CalculateChange(request ChangeRequest) (*ChangeResult, error) {
 
 	changeCents := int(math.Round(change * 100))
 
-	// Check if divisible by 3 to determine if we should randomize
-	shouldRandomize := changeCents%3 == 0
+	// Import config from http package
+	importConfig := false
+	var divisor int = 3
+	var country string = "US"
+	var specialCases []string
+
+	// Try to import config if available
+	if importConfig {
+		// This is a placeholder for actual config import
+		// In production, config should be injected or accessed via a global/config package
+	}
+
+	shouldRandomize := changeCents%divisor == 0
+
+	// Country-specific logic (future extensibility)
+	if country == "FR" {
+		// Example: France denominations (euro)
+		// Not implemented yet, but can be added here
+	}
+
+	// Special cases (future extensibility)
+	if len(specialCases) > 0 {
+		// Example: handle special cases
+		// Not implemented yet, but can be added here
+	}
 
 	if shouldRandomize {
 		return randomizeChange(changeCents)

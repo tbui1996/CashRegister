@@ -34,14 +34,40 @@ const ChangeCalculatorForm: React.FC = () => {
   const [loading, setLoading] = useRecoilState(loadingState);
   const [error, setError] = useRecoilState(errorState);
 
+  // Dropdown state
+  const [divisor, setDivisor] = useState(3);
+  const [country, setCountry] = useState('US');
+  const [specialCase, setSpecialCase] = useState('None');
+
   const calculateMutation = useCalculateChange();
 
+  // Fetch config on mount (optional)
+  React.useEffect(() => {
+    fetch('http://localhost:8080/api/config')
+      .then(res => res.json())
+      .then(cfg => {
+        setDivisor(cfg.randomDivisor || 3);
+        setCountry(cfg.country || 'US');
+        setSpecialCase(cfg.specialCases?.[0] || 'None');
+      });
+  }, []);
+
+  const handleConfigChange = async () => {
+    await fetch('http://localhost:8080/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        randomDivisor: divisor,
+        country,
+        specialCases: specialCase === 'None' ? [] : [specialCase],
+      }),
+    });
+  };
+
   const handleCalculate = async () => {
-    // Clear previous results
     setError(null);
     setChangeResult(null);
 
-    // Validate inputs
     const owed = parseFloat(amountOwed);
     const paid = parseFloat(amountPaid);
 
@@ -49,20 +75,18 @@ const ChangeCalculatorForm: React.FC = () => {
       setError('Please enter valid numbers');
       return;
     }
-
     if (paid < owed) {
       setError('Amount paid must be greater than or equal to amount owed');
       return;
     }
 
     setLoading(true);
-
     try {
+      await handleConfigChange(); // Update backend config before calculation
       const result = await calculateMutation.mutateAsync({
         amountOwed: owed,
         amountPaid: paid,
       });
-
       setChangeResult(result);
     } catch (err) {
       const errorMessage =
@@ -109,6 +133,30 @@ const ChangeCalculatorForm: React.FC = () => {
             margin="normal"
             placeholder="e.g., 3.00"
           />
+
+          {/* Dropdowns for config */}
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle1">Random Divisor</Typography>
+            <select value={divisor} onChange={e => setDivisor(Number(e.target.value))} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
+              {[3, 5, 7, 10].map(val => (
+                <option key={val} value={val}>{val}</option>
+              ))}
+            </select>
+
+            <Typography variant="subtitle1">Country</Typography>
+            <select value={country} onChange={e => setCountry(e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
+              {['US', 'FR', 'CA', 'UK'].map(val => (
+                <option key={val} value={val}>{val}</option>
+              ))}
+            </select>
+
+            <Typography variant="subtitle1">Special Case</Typography>
+            <select value={specialCase} onChange={e => setSpecialCase(e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
+              {['None', 'Twist', 'Bonus', 'Holiday'].map(val => (
+                <option key={val} value={val}>{val}</option>
+              ))}
+            </select>
+          </Box>
         </Box>
 
         {error && <Alert severity="error">{error}</Alert>}

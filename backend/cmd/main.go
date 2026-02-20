@@ -24,6 +24,8 @@ func main() {
 	router.HandleFunc("/api/change", handler.HandleCalculateChange).Methods(http.MethodPost)
 	router.HandleFunc("/api/change/batch", handler.HandleBatchCalculate).Methods(http.MethodPost)
 	router.HandleFunc("/api/change/file", handler.HandleFileUpload).Methods(http.MethodPost)
+	router.HandleFunc("/api/config", httpAdapter.HandleGetConfig).Methods(http.MethodGet)
+	router.HandleFunc("/api/config", httpAdapter.HandleSetConfig).Methods(http.MethodPost)
 	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
