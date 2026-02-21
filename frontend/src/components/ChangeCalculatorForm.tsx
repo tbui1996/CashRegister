@@ -22,6 +22,7 @@ import {
 } from '../state/atoms';
 import { ChangeResponse } from '../types';
 import useCalculateChange from '../api/mutations/useCalculateChange';
+import ChangeResultCard from './ChangeResultCard';
 /**
  * ChangeCalculatorForm Component
  * Handles user input for amount owed and amount paid.
@@ -197,38 +198,7 @@ const ChangeCalculatorForm: React.FC = () => {
         </Box>
 
         {changeResult && (
-          <Card sx={{ mt: 4, bgcolor: '#f5f5f5' }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Change Due
-              </Typography>
-
-              <Typography variant="h5" color="success.main" sx={{ mb: 2 }}>
-                ${changeResult.change.toFixed(2)}
-              </Typography>
-
-              <Typography variant="body2" color="textSecondary" gutterBottom>
-                Denominations:
-              </Typography>
-
-              <Typography variant="body1" sx={{ mb: 2, fontWeight: 500 }}>
-                {changeResult.formattedChange || 'No change required'}
-              </Typography>
-
-              <Grid container spacing={2}>
-                {Object.entries(changeResult.denominations).map(([name, count]) => (
-                  <Grid item xs={6} key={name}>
-                    <Box sx={{ p: 1, bgcolor: 'white', borderRadius: 1 }}>
-                      <Typography variant="body2" color="textSecondary">
-                        {name.charAt(0).toUpperCase() + name.slice(1)}
-                      </Typography>
-                      <Typography variant="h6">{count}</Typography>
-                    </Box>
-                  </Grid>
-                ))}
-              </Grid>
-            </CardContent>
-          </Card>
+          <ChangeResultCard result={changeResult} />
         )}
       </Paper>
     </Container>
