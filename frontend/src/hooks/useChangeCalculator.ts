@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from 'react-query';
-import { cashRegisterAPI, ChangeRequest, ChangeResponse } from '../api/cashRegisterAPI';
+import { cashRegisterAPI, ChangeRequest } from '../api/cashRegisterAPI';
 
 export function useCalculateChange(enabled: boolean = false) {
   return useMutation(
