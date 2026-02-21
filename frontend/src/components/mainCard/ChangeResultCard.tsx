@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, CardContent, Typography, Grid, Box } from '@mui/material';
-import { ChangeResponse } from '../../api/types';
-
+import { ChangeResponse } from '../../types';
 interface ChangeResultCardProps {
   result: ChangeResponse;
 }
