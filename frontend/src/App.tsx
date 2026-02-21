@@ -13,8 +13,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import ChangeCalculatorForm from './components/ChangeCalculatorForm';
-import FileUploadComponent from './components/FileUploadComponent';
+import ChangeCalculatorForm from './components/mainCard/ChangeCalculatorForm';
+import FileUploadComponent from './components/fileUpload/FileUploadComponent';
 import { theme } from './theme/theme';
 import useHealthCheck from './api/queries/useHealthCheck';
 

@@ -6,11 +6,8 @@ import {
   Button,
   Box,
   Typography,
-  Card,
-  CardContent,
   Alert,
   CircularProgress,
-  Grid,
 } from '@mui/material';
 import { useRecoilState } from 'recoil';
 import {
@@ -19,9 +16,9 @@ import {
   changeResultState,
   loadingState,
   errorState,
-} from '../state/atoms';
-import { ChangeResponse } from '../types';
-import useCalculateChange from '../api/mutations/useCalculateChange';
+} from '../../state/atoms';
+import { ChangeResponse } from '../../types';
+import useCalculateChange from '../../api/mutations/useCalculateChange';
 import ChangeResultCard from './ChangeResultCard';
 /**
  * ChangeCalculatorForm Component

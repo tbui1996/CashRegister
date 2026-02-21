@@ -7,18 +7,13 @@ import {
   Typography,
   Alert,
   CircularProgress,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useRecoilState } from 'recoil';
-import { loadingState, errorState, batchResultsState } from '../state/atoms';
-import { ChangeResponse } from '../types/index';
-import useUploadFile from '../api/mutations/useUploadFile';
+import { loadingState, errorState, batchResultsState } from '../../state/atoms';
+import { ChangeResponse } from '../../types/index';
+import useUploadFile from '../../api/mutations/useUploadFile';
+import BatchResultsTable from './BatchResultsTable';
 /**
  * FileUploadComponent
  * Handles CSV file uploads for batch change calculations.
@@ -101,39 +96,7 @@ const FileUploadComponent: React.FC = () => {
         {error && <Alert severity="error">{error}</Alert>}
 
         {batchResults.length > 0 && (
-          <>
-            <TableContainer sx={{ mt: 3 }}>
-              <Table>
-                <TableHead>
-                  <TableRow sx={{ bgcolor: '#f5f5f5' }}>
-                    <TableCell>Amount Owed</TableCell>
-                    <TableCell>Amount Paid</TableCell>
-                    <TableCell>Change</TableCell>
-                    <TableCell>Denominations</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {batchResults.map((result: ChangeResponse, index: number) => (
-                    <TableRow key={index}>
-                      <TableCell>${result.amountOwed.toFixed(2)}</TableCell>
-                      <TableCell>${result.amountPaid.toFixed(2)}</TableCell>
-                      <TableCell>${result.change.toFixed(2)}</TableCell>
-                      <TableCell>{result.formattedChange || 'No change'}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleClearResults}
-              sx={{ mt: 2 }}
-            >
-              Clear Results
-            </Button>
-          </>
+          <BatchResultsTable results={batchResults} onClear={handleClearResults} />
         )}
       </Paper>
     </Container>
