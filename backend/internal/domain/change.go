@@ -54,13 +54,9 @@ func CalculateChange(request ChangeRequest, divisor int, country string, special
 
 	changeCents := int(math.Round(change * 100))
 
-	// Import config from http package
-	importConfig := false
-
-	// Try to import config if available
-	if importConfig {
-		// This is a placeholder for actual config import
-		// In production, config should be injected or accessed via a global/config package
+	// Ensure divisor is valid
+	if divisor <= 0 {
+		divisor = 3
 	}
 
 	shouldRandomize := changeCents%divisor == 0
@@ -79,10 +75,6 @@ func CalculateChange(request ChangeRequest, divisor int, country string, special
 
 	if shouldRandomize {
 		return randomizeChange(changeCents)
-		// Check divisor to determine if we should randomize
-		if divisor <= 0 {
-			divisor = 3
-		}
 	}
 
 	return minimumChange(changeCents), nil
@@ -120,44 +112,54 @@ func minimumChange(cents int) *ChangeResult {
 
 // randomizeChange generates random valid denominations for the change amount
 func randomizeChange(cents int) (*ChangeResult, error) {
-	result := make(map[string]int)
-	remaining := cents
-
-	// Generate random valid combination
-	// Use a greedy approach with randomization
-	denominations := []struct {
-		name  string
-		value int
-	}{
-		{name: "dollar", value: 100},
-		{name: "quarter", value: 25},
-		{name: "dime", value: 10},
-		{name: "nickel", value: 5},
-		{name: "penny", value: 1},
+	// If cents is zero, return greedy
+	if cents == 0 {
+		return minimumChange(0), nil
 	}
 
-	// Create valid combinations by randomizing the algorithm
-	for _, denom := range denominations[0:4] { // Don't randomize pennies
-		maxCount := remaining / denom.value
-		if maxCount > 0 {
-			// Randomly pick between 0 and max for this denomination
-			randomCount := rand.Intn(maxCount + 1)
-			if randomCount > 0 {
-				result[denom.name] = randomCount
-				remaining -= randomCount * denom.value
+	greedy := minimumChange(cents)
+	for {
+		result := make(map[string]int)
+		remaining := cents
+		denominations := []struct {
+			name  string
+			value int
+		}{
+			{name: "dollar", value: 100},
+			{name: "quarter", value: 25},
+			{name: "dime", value: 10},
+			{name: "nickel", value: 5},
+			{name: "penny", value: 1},
+		}
+		for _, denom := range denominations[0:4] { // Don't randomize pennies
+			maxCount := remaining / denom.value
+			if maxCount > 0 {
+				randomCount := rand.Intn(maxCount + 1)
+				if randomCount > 0 {
+					result[denom.name] = randomCount
+					remaining -= randomCount * denom.value
+				}
 			}
 		}
+		if remaining > 0 {
+			result["penny"] = remaining
+		}
+		// Check if result matches greedy
+		isGreedy := true
+		for k, v := range greedy.Denominations {
+			if result[k] != v {
+				isGreedy = false
+				break
+			}
+		}
+		if !isGreedy {
+			return &ChangeResult{
+				Denominations: result,
+				Total:         float64(cents) / 100,
+			}, nil
+		}
+		// If result is greedy, try again
 	}
-
-	// Use remaining as pennies
-	if remaining > 0 {
-		result["penny"] = remaining
-	}
-
-	return &ChangeResult{
-		Denominations: result,
-		Total:         float64(cents) / 100,
-	}, nil
 }
 
 // FormatResult formats the change result as a human-readable string

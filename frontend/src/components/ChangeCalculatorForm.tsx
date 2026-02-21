@@ -39,6 +39,13 @@ const ChangeCalculatorForm: React.FC = () => {
   const [country, setCountry] = useState('US');
   const [specialCase, setSpecialCase] = useState('None');
 
+  // Feature flag: show country/specialCase dropdowns if ?flag=true
+  const [showFlag, setShowFlag] = useState(false);
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setShowFlag(params.get('flag') === 'true');
+  }, []);
+
   const calculateMutation = useCalculateChange();
 
   // Fetch config on mount (optional)
@@ -143,19 +150,23 @@ const ChangeCalculatorForm: React.FC = () => {
               ))}
             </select>
 
-            <Typography variant="subtitle1">Country</Typography>
-            <select value={country} onChange={e => setCountry(e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
-              {['US', 'FR', 'CA', 'UK'].map(val => (
-                <option key={val} value={val}>{val}</option>
-              ))}
-            </select>
+            {showFlag && (
+              <>
+                <Typography variant="subtitle1">Country</Typography>
+                <select value={country} onChange={e => setCountry(e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
+                  {['US', 'FR', 'CA', 'UK'].map(val => (
+                    <option key={val} value={val}>{val}</option>
+                  ))}
+                </select>
 
-            <Typography variant="subtitle1">Special Case</Typography>
-            <select value={specialCase} onChange={e => setSpecialCase(e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
-              {['None', 'Twist', 'Bonus', 'Holiday'].map(val => (
-                <option key={val} value={val}>{val}</option>
-              ))}
-            </select>
+                <Typography variant="subtitle1">Special Case</Typography>
+                <select value={specialCase} onChange={e => setSpecialCase(e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '8px' }}>
+                  {['None', 'Twist', 'Bonus', 'Holiday'].map(val => (
+                    <option key={val} value={val}>{val}</option>
+                  ))}
+                </select>
+              </>
+            )}
           </Box>
         </Box>
 
