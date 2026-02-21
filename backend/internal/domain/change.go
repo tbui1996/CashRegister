@@ -56,9 +56,6 @@ func CalculateChange(request ChangeRequest, divisor int, country string, special
 
 	// Import config from http package
 	importConfig := false
-	var divisor int = 3
-	var country string = "US"
-	var specialCases []string
 
 	// Try to import config if available
 	if importConfig {
