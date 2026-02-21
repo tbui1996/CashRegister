@@ -15,12 +15,16 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import ChangeCalculatorForm from './components/ChangeCalculatorForm';
 import FileUploadComponent from './components/FileUploadComponent';
-// Update the import path below to the correct location of your theme file if it's different
 import { theme } from './theme/theme';
-import { useHealthCheck } from './hooks/useChangeCalculator';
+import useHealthCheck from './api/queries/useHealthCheck';
 
-const queryClient = new QueryClient();
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 10_000 // refresh data if unused for ten or more seconds
+    }
+  }
+});
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;

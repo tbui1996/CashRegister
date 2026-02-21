@@ -17,9 +17,8 @@ import {
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useRecoilState } from 'recoil';
 import { loadingState, errorState, batchResultsState } from '../state/atoms';
-import { useUploadFile } from '../hooks/useChangeCalculator';
 import { ChangeResponse } from '../types/index';
-
+import useUploadFile from '../api/mutations/useUploadFile';
 /**
  * FileUploadComponent
  * Handles CSV file uploads for batch change calculations.
@@ -49,7 +48,7 @@ const FileUploadComponent: React.FC = () => {
 
     try {
       const results = await uploadMutation.mutateAsync(file);
-      setBatchResults(results);
+      setBatchResults(results as ChangeResponse[]);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to process file';

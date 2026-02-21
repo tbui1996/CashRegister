@@ -20,8 +20,8 @@ import {
   loadingState,
   errorState,
 } from '../state/atoms';
-import { useCalculateChange } from '../hooks/useChangeCalculator';
-
+import { ChangeResponse } from '../types';
+import useCalculateChange from '../api/mutations/useCalculateChange';
 /**
  * ChangeCalculatorForm Component
  * Handles user input for amount owed and amount paid.
@@ -94,7 +94,7 @@ const ChangeCalculatorForm: React.FC = () => {
         amountOwed: owed,
         amountPaid: paid,
       });
-      setChangeResult(result);
+      setChangeResult(result as ChangeResponse);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'Failed to calculate change';
