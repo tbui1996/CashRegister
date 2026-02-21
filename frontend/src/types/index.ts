@@ -13,3 +13,8 @@ export interface CalculationState {
   error: string | null;
   loading: boolean;
 }
+
+export interface ChangeRequest {
+  amountOwed: number;
+  amountPaid: number;
+}

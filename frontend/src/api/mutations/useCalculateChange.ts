@@ -1,8 +1,7 @@
 import { useMutation, UseMutationOptions } from 'react-query';
 import { AxiosError } from 'axios';
 import axiosInstance from '../network';
-import { ChangeRequest, ChangeResponse } from '../types';
-
+import {ChangeRequest, ChangeResponse} from '../types/index';
 const useCalculateChange = (
   options: UseMutationOptions<ChangeResponse, AxiosError, ChangeRequest> = {}
 ) => {

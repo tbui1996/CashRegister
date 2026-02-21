@@ -1,8 +1,7 @@
 import { useMutation, UseMutationOptions } from 'react-query';
 import { AxiosError } from 'axios';
 import axiosInstance from '../network';
-import { ChangeResponse } from '../types';
-
+import { ChangeResponse } from '../../types';
 const useUploadFile = (
   options: UseMutationOptions<ChangeResponse[], AxiosError, File> = {}
 ) => {

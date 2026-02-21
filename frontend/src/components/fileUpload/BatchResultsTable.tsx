@@ -8,7 +8,7 @@ import {
   TableRow,
   Button,
 } from '@mui/material';
-import { ChangeResponse } from '../../api/types';
+import { ChangeResponse } from '../../types';
 
 interface BatchResultsTableProps {
   results: ChangeResponse[];
